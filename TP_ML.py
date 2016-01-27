@@ -104,16 +104,11 @@ def get_counts_matrix(Ids, n):
 # Choisir n, et obtenir la matrice demandee pour le corpus movie_reviews.
 # Verifier que la matrice a la taille attendu avec la methode shape
 
-
-val = get_counts_matrix(Ids,5)
+n = 2000
+val = get_counts_matrix(Ids,n)
 mon_resultat = np.array(val)
-print(mon_resultat)
-
 # ligne => fichier
-n = 5
 M = mon_resultat
-
-
 # PCA
 # On utilise la classe PCA du module mlab de matplotlib
 # Les donnees projetees selon les nouvelles coordonnees sont contenues dans l'attribut PCA.Y
@@ -130,7 +125,7 @@ M = mon_resultat
 # PCA : anlyse en composante principal
 
 
-print("longueur ", M.shape)
+
 import matplotlib
 matplotlib.use('Agg') #sauvegarde a distance
 import matplotlib.pyplot as plt
@@ -141,10 +136,10 @@ MR_PCA = PCA(M)
 def plot_PCA(PCA_projection):  
     # 2 premieres dimensions des 100 premieres composantes (critiques positivies)
     # ids premieres axes, dimensions de la projection seconde coordonne
-    x_neg = PCA_projection.X(n_components=2)
-    y_neg = PCA_projection.Y[1000:]
-    x_pos = PCA_projection.X(n_components=2)
-    y_pos = PCA_projection.Y[:1000]
+    x_neg = PCA_projection[1000:][0]
+    y_neg = PCA_projection[1000:][1]
+    x_pos = PCA_projection[:1000][0]
+    y_pos = PCA_projection[:1000][1]
     #x neg commentaire negatifs
     plt.figure()
     plt.xlabel('First component')
@@ -152,10 +147,10 @@ def plot_PCA(PCA_projection):
     plt.title("PCA applied to texts of the Movie_reviews corpus")
     plt.plot(x_neg,y_neg,'ro')
     plt.plot(x_pos,y_pos,'bo')
-    plt.savefig("PCA.eps", format='eps', dpi=1000)
+    plt.savefig("PAC.eps",format='eps',dpi=1000)
+    
 
-
-plot_PCA(MR_PCA)
+#plot_PCA(MR_PCA.Y)
 """
 """
 
@@ -165,7 +160,7 @@ plot_PCA(MR_PCA)
 # Comprendre le code et completer la ligne manquante a l'aide de la procedure decrite dans les slides
 # On evitera une boucle for en vectorialisant, c'est a dire en executant l'operation pour toutes les donnes
 # a la fois a l'aide d'une operation matricielle.
-"""
+
 class perceptron(object):
     def __init__(self, data, iterations, weights = None, learning_rate = 0.1):
         self.data = data
@@ -174,8 +169,7 @@ class perceptron(object):
         if weights == None:
             self.weights = np.zeros(np.shape(data)[1])
         self.l_r = learning_rate
-"""
-"""
+
     def train(self, labels):
         counter = 0
         # On creer des variables pour retenir les meilleurs parametres
@@ -192,14 +186,13 @@ class perceptron(object):
                 break
             counter += 1
             # Completer le code pour mettre a jour l'attribut self.weights 
-            #self.weights += self.l_r * #
+            self.weights += (np.dot(self.l_r,np.dot(self.data,labels)))/ counter
             # Si notre modele s'est ameliore, on garde en memoire ses parametres
             if (errors.size < best_error_rate):
                 best_weights = self.weights
         # Une fois le nombre maximal d'iterations termine, on garde les meilleurs parametres
         self.weights = best_weights
-"""
-"""
+
     def test(self, labels):
         # On calcule la proportion d'erreurs sur les donnes
         estimate_labels = -np.ones(np.shape(labels))
@@ -212,17 +205,24 @@ class perceptron(object):
 # et entrainer et tester le perceptrons sur les labels.
 """
 """
-y = 
-model = 
+tab = [0 for i in range(1000)]
+for e in range(1000):
+    tab.append(1)
+print(len(tab)) 
+y = tab  
+model =  [0 for i in range(n)]
+percepttron = perceptron(mon_resultat,500,None,0.1) 
+print(percepttron.train(y))
+print(percepttron.test(y))
 """
 """
- 
+
 # Regression logistique
 # On utilise la classe logistic_regression: elle est presque identique a la classe perceptron.
 # La difference dans la procedure se trouve au niveau de la mise a jour: on doit calculer le gradient 
 # et les utiliser pour mettre a jour les parametres.
 # Completer le code, ici aussi en vectorialisant les calculs.
-
+"""
 class logistic_regression(object):
     def __init__(self, data, iterations, weights = None ):
         self.data = data
