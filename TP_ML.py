@@ -5,6 +5,7 @@ import operator
 import numpy as np
 import operator
 from pprint import pprint
+import random
 
 # Travail sur les donnees:
 # On importe le corpus movie_reviews de nltk
@@ -185,8 +186,8 @@ class perceptron(object):
             if not errors.size:
                 break
             counter += 1
-            # Completer le code pour mettre a jour l'attribut self.weights 
-            self.weights += (np.dot(self.l_r,np.dot(self.data,labels)))/ counter
+            if(counter in errors):
+                self.weights += (self.l_r * np.dot(self.data,labels))/ counter
             # Si notre modele s'est ameliore, on garde en memoire ses parametres
             if (errors.size < best_error_rate):
                 best_weights = self.weights
@@ -205,11 +206,12 @@ class perceptron(object):
 # et entrainer et tester le perceptrons sur les labels.
 """
 """
+
 tab = [0 for i in range(1000)]
 for e in range(1000):
     tab.append(1)
 print(len(tab)) 
-y = tab  
+y = tab 
 model =  [0 for i in range(n)]
 percepttron = perceptron(mon_resultat,500,None,0.1) 
 print(percepttron.train(y))
