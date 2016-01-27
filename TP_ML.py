@@ -79,18 +79,35 @@ def normalize_counts(count):
 # numpy.array()
 
 def get_counts_matrix(Ids, n):
-    resultat = {}
+    resultat = []
+    dics = {}
+    tmp = []
     for fid in Ids:
         liste_temp = movie_reviews.words(fileids=fid)
-        resultat[fid] = get_n_top_words(normalize_counts(count_words(liste_temp)),n)
+        count = count_words(liste_temp)
+        dics[fid]  = count
+        tmp.append(count)
+    for e in dics:
+         dics[e]  = normalize_counts(dics[e])
+    dico_finale = combine_counts(tmp)
+    dico_normalized = normalize_counts(dico_finale)
+    top_words = get_n_top_words(dico_finale,n)
+    for fich in dics:
+        tab = []
+        for mot in top_words:
+            if dics[fich].has_key(mot[0]):
+                tab.append(dics[fich][mot[0]])
+            else:
+                tab.append(0)
+        resultat.append(tab)
     return resultat    
 # Choisir n, et obtenir la matrice demandee pour le corpus movie_reviews.
 # Verifier que la matrice a la taille attendu avec la methode shape
 
 
 val = get_counts_matrix(Ids,5)
-mon_resultat = np.array(val.values())
-
+mon_resultat = np.array(val)
+print(mon_resultat)
 
 # ligne => fichier
 n = 5
@@ -112,6 +129,8 @@ M = mon_resultat
 # PCA.y => premiere dimension le nombre de critiques et ensuite les 1000 critiques
 # PCA : anlyse en composante principal
 
+
+print("longueur ", M.shape)
 import matplotlib
 matplotlib.use('Agg') #sauvegarde a distance
 import matplotlib.pyplot as plt
